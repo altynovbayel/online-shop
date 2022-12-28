@@ -1,0 +1,66 @@
+.header{
+  max-width: 1300px;
+  padding: 0 10px;
+  margin: 0 auto;
+  .row{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    align-items: center;
+    @media (max-width: 768px){
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+    }
+    @media (max-width: 600px){
+      justify-content: space-between;
+      flex-direction: row;
+      gap: 20px;
+    }
+    .burger{
+      display: none;
+      @media (max-width: 600px) {
+        display: block;
+        font-size: 24px;
+      }
+    }
+    .logo{
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+    .navList{
+      display: flex;
+      gap: 16px;
+      li{
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+      }
+      @media (max-width: 600px) {
+        display: none;
+      }
+    }
+    .iconList{
+      display: flex;
+      gap: 15px;
+      li{
+        font-size: 24px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.banner{
+  width: 90%;
+  margin: 100px auto 0;
+  img{
+    width: 100%;
+  }
+  p{
+    text-align: center;
+    font-size: 25px;
+    font-weight: 400;
+  }
+}
