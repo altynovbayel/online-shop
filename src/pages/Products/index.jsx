@@ -67,27 +67,31 @@ function Products() {
       />
       <div className={c.container}>
         {
-          filteredData.length <= 3
+          filteredData?.length <= 3
             ? filteredData?.map(item => (
               <ProductCard key={item.id} {...item}/>
-            )) :
-          filteredData?.length > 3 ?
-            filteredData?.slice(slice_1, slice_2).map(item => (
-              <ProductCard key={item.id} {...item}/>
-            )) : <h2>Нет товаров в этой категории</h2>
+            ))
+            : filteredData?.length > 3
+              ? filteredData?.slice(slice_1, slice_2).map(item => (
+                <ProductCard key={item.id} {...item}/>
+              ))
+              : <h2>Нет товаров в этой категории</h2>
         }
       </div>
-      <div className={c.pagination}>
-        <div>
-          <span onClick={prevPage}>
-            <BsArrowLeftShort/>
-          </span>
-          <span>{currentPage + 1} / {countPage + 1}</span>
-          <span onClick={nextPage}>
-            <BsArrowRightShort/>
-          </span>
+      {
+        filteredData?.length > 3 &&
+        <div className={c.pagination}>
+          <div>
+            <span onClick={prevPage}>
+              <BsArrowLeftShort/>
+            </span>
+            <span>{currentPage + 1} / {countPage + 1}</span>
+            <span onClick={nextPage}>
+              <BsArrowRightShort/>
+            </span>
+          </div>
         </div>
-      </div>
+      }
     </div>
   );
 }

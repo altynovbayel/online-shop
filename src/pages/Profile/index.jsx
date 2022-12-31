@@ -5,6 +5,7 @@ import {api} from "../../config/api";
 import Loader from "../../components/Loader";
 import ProductCard from "../../components/ProductCard";
 import Search from "../../components/Search";
+import {BsArrowLeftShort, BsArrowRightShort} from "react-icons/bs";
 
 function Profile() {
   const [data, setData] = React.useState(null)
@@ -13,8 +14,30 @@ function Profile() {
   const [input, setInput] = React.useState('')
   const [filteredData, setFilteredData] = React.useState(null)
   const [refresh, setRefresh] = React.useState('')
+  const [currentPage, setCurrentPage] = React.useState(0)
+  const [slice_1, setSlice_1] = React.useState(0)
+  const [slice_2, setSlice_2] = React.useState(3)
   
   const token = localStorage.getItem('accessToken')
+  
+  const pageSize = 3
+  const countPage = Math.floor(filteredData?.length / pageSize)
+  
+  const nextPage = () => {
+    if (currentPage < countPage) {
+      setCurrentPage(prev => prev + 1)
+      setSlice_1(prev => prev + 3)
+      setSlice_2(prev => prev + 3)
+    }
+  }
+  
+  const prevPage = () => {
+    if (currentPage >= 1) {
+      setCurrentPage(prev => prev - 1)
+      setSlice_1(prev => prev - 3)
+      setSlice_2(prev => prev - 3)
+    }
+  }
   
   React.useEffect(() => {
     api.getUser(token).then(r => setData(r.data))
@@ -72,12 +95,43 @@ function Profile() {
         <Search setCategories={setCategories} setInput={setInput}/>
         <div className={c.favorite_container}>
           {
-            filteredData?.length > 0 ?
-            filteredData?.map((item, index) => (
-              <ProductCard key={index} {...item}/>
-            )) : <h2>Нет избранных в этой категории</h2>
+            filteredData?.length <= 3
+              ? filteredData?.map(item => (
+                <ProductCard
+                  key={item.id}
+                  {...item}
+                  page={'favorite'}
+                  fav={data}
+                  setRefresh={setRefresh}
+                />
+              ))
+              : filteredData?.length > 3
+                ? filteredData?.slice(slice_1, slice_2).map(item => (
+                  <ProductCard
+                    key={item.id}
+                    {...item}
+                    page={'favorite'}
+                    fav={data}
+                    setRefresh={setRefresh}
+                  />
+                ))
+                : <h2>Нет избранных в этой категории</h2>
           }
         </div>
+        {
+          filteredData?.length > 3 &&
+          <div className={c.pagination}>
+            <div>
+            <span onClick={prevPage}>
+              <BsArrowLeftShort/>
+            </span>
+              <span>{currentPage + 1} / {countPage + 1}</span>
+              <span onClick={nextPage}>
+              <BsArrowRightShort/>
+            </span>
+            </div>
+          </div>
+        }
       </div>
     </div>
   );

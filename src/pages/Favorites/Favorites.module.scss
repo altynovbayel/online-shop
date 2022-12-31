@@ -8,4 +8,21 @@
     flex-wrap: wrap;
     gap: 20px;
   }
+  .pagination{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+    div{
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      span{
+        font-size: 20px;
+        svg{
+          cursor: pointer;
+        }
+      }
+    }
+  }
 }
