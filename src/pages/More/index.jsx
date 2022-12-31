@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {api} from "../../config/api";
 import c from './More.module.scss'
 import {MdOutlineFavorite, MdOutlineFavoriteBorder} from "react-icons/md";
@@ -60,6 +60,9 @@ function More() {
   if(!data) return <Loader/>
   return (
     <div className={c.more}>
+      <Link to={'/'}>
+        В главный
+      </Link>
       <div className={c.container}>
         <div className={c.product_img}>
           <img src={data.image} alt="" />

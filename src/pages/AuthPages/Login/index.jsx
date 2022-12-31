@@ -20,6 +20,8 @@ function Login() {
         .then(r => {
           localStorage.setItem('accessToken', r.data.access)
           localStorage.setItem('refreshToken', r.data.refresh)
+          alert('вы зашли на свой аккаунт')
+          reset()
         })
     }
   }

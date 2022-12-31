@@ -4,26 +4,41 @@ import c from './Profile.module.scss'
 import {api} from "../../config/api";
 import Loader from "../../components/Loader";
 import ProductCard from "../../components/ProductCard";
+import Search from "../../components/Search";
 
-function Profile(props) {
+function Profile() {
   const [data, setData] = React.useState(null)
   const [favorite, setFavorite] = React.useState(null)
+  const [categories, setCategories] = React.useState('')
+  const [input, setInput] = React.useState('')
+  const [filteredData, setFilteredData] = React.useState(null)
+  const [refresh, setRefresh] = React.useState('')
+  
   const token = localStorage.getItem('accessToken')
+  
   React.useEffect(() => {
     api.getUser(token).then(r => setData(r.data))
     setFavorite(JSON.parse(localStorage.getItem('favorites')))
+    setFilteredData(JSON.parse(localStorage.getItem('favorites')))
   }, [])
+  
+  React.useEffect(() => {
+    if (categories === 'All') {
+      setFilteredData(favorite)
+    } else {
+      const base = favorite?.filter(item => item.category === categories)
+      setFilteredData(base)
+    }
+  }, [categories])
+  
+  React.useEffect(() => {
+    const base = filteredData?.filter(item => item.title.toLowerCase().includes(input.toLowerCase()))
+    input.length === 0 ? setFilteredData(favorite) : setFilteredData(base)
+  }, [input])
   
   if (!data) return <Loader/>
   return (
     <div>
-      <Link to={'/auth/login'}>
-        Вход
-      </Link>
-      <Link to={'/auth/register'}>
-        Регисрация
-      </Link>
-      
       <div className={c.profile}>
         <div className={c.container}>
           <div className={c.left_side}>
@@ -54,12 +69,13 @@ function Profile(props) {
       </div>
       <div className={c.favorite_block}>
         <h3>Ваши избранные товары</h3>
+        <Search setCategories={setCategories} setInput={setInput}/>
         <div className={c.favorite_container}>
           {
-            favorite &&
-            favorite.map((item, index) => (
+            filteredData?.length > 0 ?
+            filteredData?.map((item, index) => (
               <ProductCard key={index} {...item}/>
-            ))
+            )) : <h2>Нет избранных в этой категории</h2>
           }
         </div>
       </div>

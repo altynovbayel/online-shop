@@ -1,18 +1,18 @@
 import React from 'react';
 import {api} from "../../config/api";
-import ProductCard from "../../components/ProductCard";
 import c from './Cart.module.scss'
-import useProducts from "../../hooks/useProducts";
 import {AiOutlineDelete, AiOutlineMinus, AiOutlinePlus} from "react-icons/ai";
 import Loader from "../../components/Loader";
+import {useNavigate} from "react-router-dom";
 
 function Cart() {
   const [data, setData] = React.useState(null)
-  const [count, setCount] = React.useState(1)
   
   const baseUrl = 'https://cryxxen.pythonanywhere.com/'
   
   const accessToken = localStorage.getItem('accessToken')
+  
+  const navigate = useNavigate()
   
   const getData = () => api.getBasket(accessToken).then(r => setData(r.data))
   
@@ -20,19 +20,28 @@ function Cart() {
     getData()
   }, [])
   
-  const changeCount = (id) => {
-    console.log(id)
-    // api.changeCount(accessToken,id, count).then(r => console.log(r))
+  const changeCount = (id, count) => {
+    if(accessToken) {
+      api.changeCount(accessToken,
+        {"product": JSON.stringify(id),  "amount":JSON.stringify(count)})
+        .then(r => console.log(r))
+    } else {
+      alert('Вы не авторизованы!')
+      navigate('/auth/login')
+    }
   }
   
   const deleteProduct = (id) => {
     api.deleteBasketCard(id, accessToken).then(r => r && getData())
   }
-  
+  console.log(data)
   if(!data) return  <Loader/>
   if (data.length === 0) return <h1 style={{textAlign: 'center'}}>ваша корзина пустая</h1>
   return (
     <div className={c.cart}>
+      <div className={c.cart_background}>
+        <img src="/assets/cart-background.svg" alt="" />
+      </div>
       {
         data.map((item, id) => (
           <div className={c.cart_product} key={id}>
@@ -50,16 +59,22 @@ function Cart() {
               <div className={c.cart_count}>
                 <div className={c.counter}>
                   кол-во:
-                  <button onClick={() => setCount(prev => prev - 1)} disabled={count <= 1}>
+                  <button
+                    onClick={() => changeCount(item.products_data[0].id, item.products_data[0].amount--)}
+                    disabled={item.products_data[0].amount <= 1}
+                  >
                     <AiOutlineMinus/>
                   </button>
-                  {count}
-                  <button onClick={() => changeCount(item.products_data[0].id)}>
+                  {item.products_data[0].amount}
+                  <button  onClick={() => {
+                    changeCount(item.id, item.products_data[0].amount++)
+                    console.log(item.id)
+                  }}>
                     <AiOutlinePlus />
                   </button>
                 </div>
                 <div className={c.price}>
-                  стоимость: {item.products_data[0].price}
+                  стоимость: {item.products_data[0].price * item.products_data[0].amount}
                 </div>
               </div>
             </div>

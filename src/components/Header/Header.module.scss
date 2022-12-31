@@ -38,8 +38,19 @@
         text-transform: uppercase;
       }
       @media (max-width: 600px) {
-        display: none;
+        position: absolute;
+        flex-direction: column;
+        top: 50px;
+        left: -1000px;
+        background-color: #10171F;
+        padding: 20px;
+        transition: .5s;
+        border-radius: 0 10px 10px 0;
+        z-index: 10;
       }
+    }
+    .navList.nav_active{
+      left: 0;
     }
     .iconList{
       display: flex;

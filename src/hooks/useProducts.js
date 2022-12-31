@@ -7,6 +7,7 @@ function UseProducts(props) {
   React.useEffect(() => {
     api.getProducts().then(r => setBase(r.data))
   }, [])
+  
   return {
     base
   };

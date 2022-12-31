@@ -3,6 +3,7 @@ import c from './Header.module.scss'
 import {navbarList, socialLink} from "../../utils/list";
 import {Link} from "react-router-dom";
 import {GiHamburgerMenu} from "react-icons/gi";
+import {FaUserAlt} from "react-icons/fa";
 
 function Header() {
   const [burgerActive, setBurgerActive] = React.useState(false)
@@ -18,11 +19,11 @@ function Header() {
           onClick={() => setBurgerActive(prev => !prev)}>
           <GiHamburgerMenu/>
         </div>
-        <ul className={c.navList}>
+        <ul className={burgerActive ? `${c.navList} ${c.nav_active}` : c.navList}>
           {
             navbarList.map(item => {
               return(
-                <li key={item.id}>
+                <li key={item.id} onClick={() => setBurgerActive(false)}>
                   <Link to={item.route}>
                     {item.title}
                   </Link>
@@ -30,8 +31,14 @@ function Header() {
               )
             })
           }
+         
         </ul>
         <ul className={c.iconList}>
+          <li>
+            <Link to={'auth/login'}>
+              <FaUserAlt/>
+            </Link>
+          </li>
           {
             socialLink.map(item => {
               return(
