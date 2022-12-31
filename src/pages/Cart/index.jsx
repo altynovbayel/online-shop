@@ -31,10 +31,15 @@ function Cart() {
     }
   }
   
+  const initialValue = 0;
+  const priceSum = data?.reduce((accum, item) => item.total + accum, initialValue)
+  
+
+  
   const deleteProduct = (id) => {
     api.deleteBasketCard(id, accessToken).then(r => r && getData())
   }
-  console.log(data)
+ 
   if(!data) return  <Loader/>
   if (data.length === 0) return <h1 style={{textAlign: 'center'}}>ваша корзина пустая</h1>
   return (
@@ -74,7 +79,7 @@ function Cart() {
                   </button>
                 </div>
                 <div className={c.price}>
-                  стоимость: {item.products_data[0].price * item.products_data[0].amount}
+                  стоимость: {item.products_data[0].price * item.products_data[0].amount}сом
                 </div>
               </div>
             </div>
@@ -87,6 +92,9 @@ function Cart() {
           </div>
         ))
       }
+      <div className={c.totalSum}>
+        <span>Итого: {priceSum}сом</span>
+      </div>
     </div>
   );
 }

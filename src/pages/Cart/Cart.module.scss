@@ -1,6 +1,6 @@
 .cart{
   max-width: 1300px;
-  margin: 0 auto;
+  margin: 0 auto 50px;
   padding: 0 20px;
   .cart_background{
     margin-top: 50px;
@@ -64,6 +64,13 @@
       svg{
         font-size: 20px;
       }
+    }
+  }
+  .totalSum{
+    display: flex;
+    justify-content: end;
+    span{
+      font-size: 20px;
     }
   }
 }
